@@ -117,6 +117,19 @@ void redefinir_senha_login() {
 		}
 		cout << " | Codigo valido! " << endl;
 	}
+	cout << " | Digite sua nova senha: ";
+	string nova_senha;
+	string confirmacao_senha;
+	string senha_final;
+	cin >> nova_senha;
+	cout << " | Confirme sua senha: ";
+	cin >> confirmacao_senha;
+	if (nova_senha.compare(confirmacao_senha) != 0) {
+		cerr << " | Senhas diferentes. Tente novamente!" << endl;
+	}
+	else {
+		senha_final = nova_senha;
+	}
 }
 
 void menu_login(Conta Contas[], int &cadastros) {
