@@ -80,7 +80,9 @@ Conta criar_conta() {
 }
 
 void listar_contas(Conta Contas[], const int cadastros) {
-	
+	for (int i = 0; i < cadastros; i++) {
+		cout << Contas[i].retorna_nome() << endl;
+	}
 }
 
 void menu_login(Conta Contas[], int &cadastros) {
@@ -98,7 +100,7 @@ void menu_login(Conta Contas[], int &cadastros) {
 			break;
 		case '2':
 			Conta_Temp = criar_conta();
-			Contas[100 - cadastros].adicionar_conta(Conta_Temp.retorna_nome(), Conta_Temp.retorna_email(), Conta_Temp.retorna_senha());
+			Contas[cadastros].adicionar_conta(Conta_Temp.retorna_nome(), Conta_Temp.retorna_email(), Conta_Temp.retorna_senha());
 			cadastros++;
 			break;
 		case '3':
@@ -114,13 +116,12 @@ void menu_login(Conta Contas[], int &cadastros) {
 }
 
 int main() {
-	int* cadastros = new int;
-	*cadastros = 100;
-	Conta *Contas = new Conta[*cadastros];
-	menu_login(Contas, *cadastros);
-	menu_login(Contas, *cadastros);
-	menu_login(Contas, *cadastros);
+	int max_cadastros = 100;
+	Conta *Contas = new Conta[max_cadastros];
+	int qtd_cadastros = 0;
+	menu_login(Contas, qtd_cadastros);
+	menu_login(Contas, qtd_cadastros);
+	listar_contas(Contas, qtd_cadastros);
 	delete[] Contas;
-	delete cadastros;
 	return 0;
 }
