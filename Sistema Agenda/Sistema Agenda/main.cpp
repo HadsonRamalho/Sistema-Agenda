@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include<stdlib.h>
+#include<time.h>
 
 using namespace std;
 
@@ -82,13 +84,47 @@ Conta criar_conta() {
 void listar_contas(Conta Contas[], const int cadastros) {
 	for (int i = 0; i < cadastros; i++) {
 		cout << Contas[i].retorna_nome() << endl;
+		cout << Contas[i].retorna_email() << endl;
+	}
+}
+
+void redefinir_senha_login() {
+	cout << "\tMENU DE REDEFINICAO DE SENHA" << endl
+		<< " | Digite seu email: " << endl;
+	string email_recuperacao;
+	cin >> email_recuperacao;
+	int codigo_verificacao[5];
+	cout << " | Codigo de verificacao: " << endl;
+	srand((unsigned)time(NULL));
+	for (int i = 0; i < 5; i++) {
+		codigo_verificacao[i] = 0 + (rand() % 10);
+		cout << codigo_verificacao[i];
+		if (i != 4) {
+			cout << " | ";
+		}
+	}
+	cout << " | Digite o codigo de verificao: ";
+	int codigo_usuario[5];
+	for (int i = 0; i < 5; i++) {
+		cin >> codigo_usuario[i];
+	}
+	bool codigo_valido = false;
+	for (int i = 0; i < 5; i++) {
+		if (codigo_usuario[i] != codigo_verificacao[i]) {
+			codigo_valido = false;
+			cerr << " | Codigo invalido" << endl;
+			break;
+		}
+		cout << " | Codigo valido! " << endl;
 	}
 }
 
 void menu_login(Conta Contas[], int &cadastros) {
 	string opcao;
+	string email_login;
+	string senha_login;
 	Conta Conta_Temp;
-	//do {
+	do {
 		cout << "\tMENU DE LOGIN" << endl
 			<< " 1 | Tenho conta" << endl
 			<< " 2 | Nao tenho conta" << endl
@@ -97,6 +133,13 @@ void menu_login(Conta Contas[], int &cadastros) {
 		cin >> opcao;
 		switch (opcao[0]) {
 		case '1':
+			cout << " | Insira seu email: ";
+			cin >> email_login;
+			cout << " | Insira sua senha [-1 para 'Esqueci minha senha']: ";
+			cin >> senha_login;
+			if (senha_login.compare("-1") == 0) {
+				redefinir_senha_login();
+			}
 			break;
 		case '2':
 			Conta_Temp = criar_conta();
@@ -111,7 +154,7 @@ void menu_login(Conta Contas[], int &cadastros) {
 			opcao[0] = '-1';
 		}
 
-	//} while (opcao[0] == '4' || opcao[0] == '-1');
+	} while (opcao[0] == '4' || opcao[0] == '-1');
 
 }
 
@@ -119,7 +162,6 @@ int main() {
 	int max_cadastros = 100;
 	Conta *Contas = new Conta[max_cadastros];
 	int qtd_cadastros = 0;
-	menu_login(Contas, qtd_cadastros);
 	menu_login(Contas, qtd_cadastros);
 	listar_contas(Contas, qtd_cadastros);
 	delete[] Contas;
