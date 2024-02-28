@@ -14,6 +14,7 @@ public:
     void atribui_nome(string nome);
     void atribui_id(int id);
     void atribui_preco(float preco);
+    void cadastra_produto(Produto Prod);
 };
 
 void Produto::atribui_nome(string nome) {
@@ -31,30 +32,49 @@ void Produto::atribui_preco(float preco) {
 class Conta_Comerciante {
 private:
     string nome_empresa;
-    Produto Produto;
+    Produto Prod;
     int qtd_produtos;
 public:
     Conta_Comerciante() {
         this->nome_empresa="default";
         this->qtd_produtos = 0;
 
-        this->Produto.atribui_id(0);
-        this->Produto.atribui_preco(0);
-        this->Produto.atribui_nome("default");
+        this->Prod.atribui_id(0);
+        this->Prod.atribui_preco(0);
+        this->Prod.atribui_nome("default");
         this->qtd_produtos = 1;
     }
     void cadastra_produto(Produto Prod);
     void remove_produto(int id);
     Produto busca_produto(Produto Prod);
     void atribui_nome(string nome_empr);
+    void modifica_qtd(int qtd);
+    int retorna_qtd();
+    void prod_atribui_nome(string nome);
+    void prod_atribui_preco(float preco);
+    void prod_atribui_id(int id);
 };
 
-void Conta_Comerciante::atribui_nome(string nome_empr){
+void Conta_Comerciante::prod_atribui_nome(string nome){
+	this->Prod.atribui_nome(nome);
+}
 
+void Conta_Comerciante::prod_atribui_id(int id){
+	this->Prod.atribui_id(id);
+}
+
+void Conta_Comerciante::prod_atribui_preco(float preco){
+	this->Prod.atribui_preco(preco);
+}
+
+void Conta_Comerciante::atribui_nome(string nome_empr){
+	this->nome_empresa = nome_empr;
 }
 
 void Produto::cadastra_produto(Produto Prod) {
-    this->Produto = Prod;
+    this->id = Prod.id;
+    this->preco = Prod.preco;
+    this->nome = Prod.nome;
 }
 
 class Conta {
@@ -308,10 +328,18 @@ void inicializaLista(Conta Contas[], int max_contas, int &qtd_cadastros) {
 
 // inicializar C_C, PROD
 void inicializaContaComerc(Conta_Comerciante Contas[], int &qtd_cadastros){
-	for(int i = 0; i < 5; i++){
-    	cria_produto(Contas[i]);
-        Contas[i].atribui_nome();
+        for(int i = 0; i < 5; i++){
+           // cria_produto(Contas[i]);
+        	Contas[i].atribui_nome("Conta" + i + 48);
     }
+}
+
+void Conta_Comerciante::modifica_qtd(int qtd){
+	this->qtd_produtos += qtd;
+}
+
+int Conta_Comerciante::retorna_qtd(){
+	return this->qtd_produtos;
 }
 
 void cria_produto(Conta_Comerciante &Conta) {
@@ -325,13 +353,19 @@ void cria_produto(Conta_Comerciante &Conta) {
         cerr << " | Valor do produto nao pode ser menor que zero. Digite novamente: ";
         cin >> preco_prod;
     }
-    Conta.Produto.atribui_nome(nome_prod);
-    Conta.Produto.atribui_preco(preco_prod);
-    Conta.qtd_produtos+=1;
-    Conta.Produto.atribui_id(Conta.qtd_produtos);
+    Conta.prod_atribui_nome(nome_prod); //Prod.atribui_nome(nome_prod);
+    Conta.prod_atribui_preco(preco_prod);
+    Conta.modifica_qtd(1);
+    Conta.prod_atribui_id(Conta.retorna_qtd());
 }
 
-void interface_inicial_sistema() {
+void lista_cadastros(Conta_Comerciante Contas[], int qtd_cadastros){
+	for(int i = 0; i < qtd_cadastros; i++){
+    //	cout << Contas[i].retornaalgo();
+    }
+}
+
+void interface_inicial_sistema(Conta &Conta) {
 
 }
 
