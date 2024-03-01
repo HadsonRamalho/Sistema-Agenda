@@ -11,6 +11,11 @@ private:
     int id;
     float preco;
 public:
+    Produto() {
+        this->nome = "default";
+        this->id = 0;
+        this->preco = 0;
+    };
     void atribui_nome(string nome);
     void atribui_id(int id);
     void atribui_preco(float preco);
@@ -34,10 +39,12 @@ private:
     string nome_empresa;
     Produto Prod;
     int qtd_produtos;
+    string categoria;
 public:
     Conta_Comerciante() {
         this->nome_empresa="default";
         this->qtd_produtos = 0;
+        this->categoria = "default";
 
         this->Prod.atribui_id(0);
         this->Prod.atribui_preco(0);
@@ -50,10 +57,25 @@ public:
     void atribui_nome(string nome_empr);
     void modifica_qtd(int qtd);
     int retorna_qtd();
+    string retorna_nome_empresa();
     void prod_atribui_nome(string nome);
     void prod_atribui_preco(float preco);
     void prod_atribui_id(int id);
+    string retorna_categoria();
+    void atribui_categoria(string categoria);
 };
+
+void Conta_Comerciante::atribui_categoria(string categoria) {
+    this->categoria = categoria;
+}
+
+string Conta_Comerciante::retorna_categoria() {
+    return this->categoria;
+}
+
+string Conta_Comerciante::retorna_nome_empresa() {
+    return this->nome_empresa;
+}
 
 void Conta_Comerciante::prod_atribui_nome(string nome){
 	this->Prod.atribui_nome(nome);
@@ -359,23 +381,46 @@ void cria_produto(Conta_Comerciante &Conta) {
     Conta.prod_atribui_id(Conta.retorna_qtd());
 }
 
-void lista_cadastros(Conta_Comerciante Contas[], int qtd_cadastros){
+void inicializaContasC(Conta_Comerciante Contas[], int qtd_cadastros){
 	for(int i = 0; i < qtd_cadastros; i++){
-    //	cout << Contas[i].retornaalgo();
+        Contas[i].atribui_nome("Empr");
+        Contas[i].atribui_categoria("Artesanato");
     }
 }
 
-void interface_inicial_sistema(Conta &Conta) {
+void inicializa_categorias(string categorias[]) {
+    categorias[0] = "Artesanato";
+    categorias[1] = "Bar";
+    categorias[2] = "Roupas";
+    categorias[3] = "Servicos";
+    categorias[4] = "Sorveterias";
+}
 
+void interface_inicial_sistema(Conta_Comerciante ContasC[]) {
+    cout << "\tCATEGORIAS" << endl;
+    string categorias[5];
+    inicializa_categorias(categorias);
+    ContasC[0].atribui_categoria("Artesanato");
+    ContasC[0].atribui_nome("Empresa0");
+    for (int i = 0; i < 5; i++) {
+        cout << categorias[i] << endl << "-------------" << endl;
+        if (categorias[i].compare(ContasC[i].retorna_categoria()) == 0) {
+            cout << " | " << ContasC[i].retorna_nome_empresa() << endl << "------------" << endl;
+        }
+    }
 }
 
 int main() {
     int max_cadastros = 100;
     Conta *Contas = new Conta[max_cadastros];
+    Conta_Comerciante* ContasC = new Conta_Comerciante[max_cadastros];
     int qtd_cadastros = 0;
+    int qtd_cadastrosC = 0;
     inicializaLista(Contas, max_cadastros, qtd_cadastros);
-    menu_login(Contas, qtd_cadastros);
-    menu_login(Contas, qtd_cadastros);
+    inicializaContasC(ContasC, qtd_cadastrosC);
+    //menu_login(Contas, qtd_cadastros);
+   // menu_login(Contas, qtd_cadastros);
+    interface_inicial_sistema(ContasC);
     delete[] Contas;
     return 0;
 }
