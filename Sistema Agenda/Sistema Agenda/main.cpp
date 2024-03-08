@@ -1,169 +1,17 @@
-#include <iostream>
-#include <string>
 #include<stdlib.h>
 #include<time.h>
+#include "Dev-Dados.h"
 
 using namespace std;
 
-class Produto {
-private:
-    string nome;
-    int id;
-    float preco;
-public:
-    Produto() {
-        this->nome = "default";
-        this->id = 0;
-        this->preco = 0;
-    };
-    void atribui_nome(string nome);
-    void atribui_id(int id);
-    void atribui_preco(float preco);
-    void cadastra_produto(Produto Prod);
-};
-
-void Produto::atribui_nome(string nome) {
-    this->nome = nome;
-}
-
-void Produto::atribui_id(int id) {
-    this->id = id;
-}
-
-void Produto::atribui_preco(float preco) {
-    this->preco = preco;
-}
-
-class Conta_Comerciante {
-private:
-    string nome_empresa;
-    Produto Prod;
-    int qtd_produtos;
-    string categoria;
-public:
-    Conta_Comerciante() {
-        this->nome_empresa="default";
-        this->qtd_produtos = 0;
-        this->categoria = "default";
-
-        this->Prod.atribui_id(0);
-        this->Prod.atribui_preco(0);
-        this->Prod.atribui_nome("default");
-        this->qtd_produtos = 1;
-    }
-    void cadastra_produto(Produto Prod);
-    void remove_produto(int id);
-    Produto busca_produto(Produto Prod);
-    void atribui_nome(string nome_empr);
-    void modifica_qtd(int qtd);
-    int retorna_qtd();
-    string retorna_nome_empresa();
-    void prod_atribui_nome(string nome);
-    void prod_atribui_preco(float preco);
-    void prod_atribui_id(int id);
-    string retorna_categoria();
-    void atribui_categoria(string categoria);
-};
-
-void Conta_Comerciante::atribui_categoria(string categoria) {
-    this->categoria = categoria;
-}
-
-string Conta_Comerciante::retorna_categoria() {
-    return this->categoria;
-}
-
-string Conta_Comerciante::retorna_nome_empresa() {
-    return this->nome_empresa;
-}
-
-void Conta_Comerciante::prod_atribui_nome(string nome){
-	this->Prod.atribui_nome(nome);
-}
-
-void Conta_Comerciante::prod_atribui_id(int id){
-	this->Prod.atribui_id(id);
-}
-
-void Conta_Comerciante::prod_atribui_preco(float preco){
-	this->Prod.atribui_preco(preco);
-}
-
-void Conta_Comerciante::atribui_nome(string nome_empr){
-	this->nome_empresa = nome_empr;
-}
-
-void Produto::cadastra_produto(Produto Prod) {
-    this->id = Prod.id;
-    this->preco = Prod.preco;
-    this->nome = Prod.nome;
-}
-
-class Conta {
-private:
-    string nome;
-    string email;
-    string senha;
-    string tipo_de_conta;
-    bool primeiro_login;
-public:
-    Conta() {
-        this->nome = "default";
-        this->email = "default";
-        this->senha = "default";
-        this->tipo_de_conta = "undefined";
-        this->primeiro_login = true;
-    }
-    void adicionar_conta(string nome, string email, string senha);
-    string retorna_nome();
-    string retorna_email();
-    string retorna_senha();
-    string retorna_tipo_conta();
-    void atribui_nome(string nome);
-    void atribui_email(string email);
-    void atribui_senha(string senha);
-};
-
-string Conta::retorna_nome() {
-    return this->nome;
-}
-
-string Conta::retorna_email() {
-    return this->email;
-}
-
-string Conta::retorna_senha() {
-    return this->senha;
-}
-
-string Conta::retorna_tipo_conta() {
-    return this->tipo_de_conta;
-}
-
-void Conta::adicionar_conta(string nome, string email, string senha) {
-    this->nome = nome;
-    this->email = email;
-    this->senha = senha;
-
-}
-
-void Conta::atribui_email(string email) {
-    this-> email = email;
-}
-
-void Conta::atribui_nome(string nome) {
-    this-> nome = nome;
-}
-
-void Conta::atribui_senha(string senha) {
-    this->senha = senha;
-}
 
 bool email_valido(string email);
 
+
+
 Conta criar_conta() {
     Conta Usuario_Temporario;
-    cout << "\tMENU DE CRIACAO DE CONTA" << endl
+    std::cout << "\tMENU DE CRIACAO DE CONTA" << endl
          << " | Insira seu nome: " << endl;
     string nome_usuario;
     cin >> nome_usuario;
@@ -195,7 +43,7 @@ Conta criar_conta() {
     return Usuario_Temporario;
 }
 
-void listar_contas(Conta Contas[], const int cadastros) {
+void listar_contas(vector<Conta> Contas, const int cadastros) {
     for (int i = 0; i < cadastros; i++) {
         cout << "-------------------" << endl;
         cout << Contas[i].retorna_nome() << endl;
@@ -243,7 +91,7 @@ int verifica_cadastro_email(Conta Contas[], int &cadastros, string email) {
     return -1;
 }
 
-bool email_existe(Conta Contas[], int &cadastros, string email) {
+bool email_existe(vector<Conta> Contas, int &cadastros, string email) {
     for(int i = 0; i < cadastros; i++) {
         if(Contas[i].retorna_email().compare(email) == 0) {
             return true;
@@ -262,7 +110,7 @@ bool email_valido(string email) {
     return true;
 }
 
-int verifica_cadastro_senha(Conta Contas[], int&cadastros, string senha) {
+int verifica_cadastro_senha(vector<Conta> Contas, int&cadastros, string senha) {
     for(int i = 0; i < cadastros; i++) {
         if(Contas[i].retorna_senha().compare(senha) == 0) {
             return i;
@@ -271,7 +119,7 @@ int verifica_cadastro_senha(Conta Contas[], int&cadastros, string senha) {
     return -1;
 }
 
-void menu_login(Conta Contas[], int &cadastros) {
+void menu_login(vector<Conta> Contas, int &cadastros) {
     string opcao;
     string email_login;
     string senha_login;
@@ -312,7 +160,8 @@ void menu_login(Conta Contas[], int &cadastros) {
             break;
         case '2':
             Conta_Temp = criar_conta();
-            Contas[cadastros].adicionar_conta(Conta_Temp.retorna_nome(), Conta_Temp.retorna_email(), Conta_Temp.retorna_senha());
+            //Contas[cadastros].adicionar_conta(Conta_Temp.retorna_nome(), Conta_Temp.retorna_email(), Conta_Temp.retorna_senha());
+            Contas.push_back(Conta_Temp);
             cadastros++;
             break;
         case '3':
@@ -327,19 +176,21 @@ void menu_login(Conta Contas[], int &cadastros) {
 
 }
 
-void inicializaLista(Conta Contas[], int max_contas, int &qtd_cadastros) {
+void inicializaLista(vector<Conta> &Contas, int max_contas, int &qtd_cadastros) {
     string initEm = "user @gmail.com";
     string initNo = "nome ";
     string initSe = "senha ";
     char indice[1];
+    Conta Conta_Temp;
     for(int i = 0; i < 4; i++) {
         indice[0] = i + 48;
         initEm[4] = indice[0];
         initNo[4] = indice[0];
         initSe[5] = indice[0];
-        Contas[i].atribui_email(initEm);
-        Contas[i].atribui_nome(initNo);
-        Contas[i].atribui_senha(initSe);
+        Conta_Temp.atribui_email(initEm);
+        Conta_Temp.atribui_nome(initNo);
+        Conta_Temp.atribui_senha(initSe);
+        Contas.push_back(Conta_Temp);
         cout << "Nome: " << Contas[i].retorna_nome() << endl;
         cout << "Email: " << Contas[i].retorna_email() << endl;
         cout << "Senha: " << Contas[i].retorna_senha() << endl;
@@ -381,7 +232,7 @@ void cria_produto(Conta_Comerciante &Conta) {
     Conta.prod_atribui_id(Conta.retorna_qtd());
 }
 
-void inicializaContasC(Conta_Comerciante Contas[], int qtd_cadastros){
+void inicializaContasC(vector<Conta_Comerciante> &Contas, int qtd_cadastros){
 	for(int i = 0; i < qtd_cadastros; i++){
         Contas[i].atribui_nome("Empr");
         Contas[i].atribui_categoria("Artesanato");
@@ -396,7 +247,7 @@ void inicializa_categorias(string categorias[]) {
     categorias[4] = "Sorveterias";
 }
 
-void interface_inicial_sistema(Conta_Comerciante ContasC[]) {
+void interface_inicial_sistema(vector<Conta_Comerciante> &ContasC) {
     cout << "\tCATEGORIAS" << endl;
     string categorias[5];
     inicializa_categorias(categorias);
@@ -412,15 +263,18 @@ void interface_inicial_sistema(Conta_Comerciante ContasC[]) {
 
 int main() {
     int max_cadastros = 100;
-    Conta *Contas = new Conta[max_cadastros];
-    Conta_Comerciante* ContasC = new Conta_Comerciante[max_cadastros];
+    vector<Conta> Contas;
+   // Conta *Contas = new Conta[max_cadastros];
+    vector<Conta_Comerciante> ContasC;
+    //Conta_Comerciante* ContasC = new Conta_Comerciante[max_cadastros];
     int qtd_cadastros = 0;
     int qtd_cadastrosC = 0;
+    inicia_dados(3);
     inicializaLista(Contas, max_cadastros, qtd_cadastros);
     inicializaContasC(ContasC, qtd_cadastrosC);
-    //menu_login(Contas, qtd_cadastros);
+    menu_login(Contas, qtd_cadastros);
+    
    // menu_login(Contas, qtd_cadastros);
-    interface_inicial_sistema(ContasC);
-    delete[] Contas;
+    //interface_inicial_sistema(ContasC);
     return 0;
 }
