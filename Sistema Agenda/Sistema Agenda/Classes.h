@@ -2,13 +2,6 @@
 #include <string>
 #include <vector>
 
-/*struct Conta_Comum {
-    std::string email;
-    std::string nome;
-    std::string senha;
-    std::string tipo_de_conta;
-};*/
-
 class Produto {
 private:
     std::string nome;
