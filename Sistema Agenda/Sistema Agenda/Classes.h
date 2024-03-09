@@ -2,12 +2,12 @@
 #include <string>
 #include <vector>
 
-struct Conta_Comum {
+/*struct Conta_Comum {
     std::string email;
     std::string nome;
     std::string senha;
     std::string tipo_de_conta;
-};
+};*/
 
 class Produto {
 private:
@@ -16,7 +16,7 @@ private:
     float preco;
 public:
     Produto() {
-        this->nome = "default";
+        this->nome = "undefined";
         this->id = 0;
         this->preco = 0;
     }
@@ -49,25 +49,38 @@ public:
     }
 };
 
-class Conta_Comerciante {
+class Conta {
 private:
     std::string nome_empresa;
+    std::string nome;
+    std::string email;
+    std::string senha;
+    std::string tipo_de_conta;
     std::vector<Produto> Prods;
-    int qtd_produtos;
+    Produto Temp;
+    std::string cnpj;
+    int qtd_produtos = 0;
     std::string categoria;
 public:
-    Conta_Comerciante() {
-        this->nome_empresa = "default";
+    Conta() {
+        this->nome = "undefined";
+        this->nome_empresa = "undefined";
         this->qtd_produtos = 0;
-        this->categoria = "default";
-
-        this->Prods[qtd_produtos].atribui_id(0);
-        this->Prods[qtd_produtos].atribui_preco(0);
-        this->Prods[qtd_produtos].atribui_nome("default");
-        this->qtd_produtos = 0;
+        this->categoria = "undefined";
+        this->cnpj = "undefined";
+        this->tipo_de_conta = "undefined";
+        
+        this->Temp.atribui_id(0);
+        this->Temp.atribui_preco(0);
+        this->Temp.atribui_nome("undefined");
+        this->Prods.push_back(Temp);
     }
 
-    void atribui_nome(std::string nome_empr) {
+    void atribui_cnpj(std::string cnpj) {
+        this->cnpj = cnpj;
+    }
+
+    void atribui_nome_empr(std::string nome_empr) {
         this->nome_empresa = nome_empr;
     }
 
@@ -114,12 +127,47 @@ public:
         return false;
     }
 
+
+    /////////////////////////////////////
+
+    void adicionar_conta(std::string nome, std::string email, std::string senha) {
+        this->nome = nome;
+        this->email = email;
+        this->senha = senha;
+
+    }
+    std::string retorna_nome() {
+        return this->nome;
+    }
+    std::string retorna_email() {
+        return this->email;
+    }
+
+    std::string retorna_senha() {
+        return this->senha;
+    }
+    std::string retorna_tipo_conta() {
+        return this->tipo_de_conta;
+    }
+    void atribui_nome(std::string nome) {
+        this->nome = nome;
+    }
+    void atribui_email(std::string email) {
+        this->email = email;
+    }
+    void atribui_senha(std::string senha) {
+        this->senha = senha;
+    }
+
+    void atribui_tipo_conta(std::string tipo_conta) {
+        this->tipo_de_conta = tipo_conta;
+    }
+
+
 };
 
 
-
-
-class Conta {
+class ContaCliente {
 private:
     std::string nome;
     std::string email;
@@ -127,7 +175,7 @@ private:
     std::string tipo_de_conta;
     bool primeiro_login;
 public:
-    Conta() {
+    ContaCliente() {
         this->nome = "default";
         this->email = "default";
         this->senha = "default";
@@ -162,19 +210,9 @@ public:
     void atribui_senha(std::string senha) {
         this->senha = senha;
     }
+
+    void atribui_tipo_conta(std::string tipo_conta) {
+        this->tipo_de_conta = tipo_conta;
+    }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
