@@ -37,11 +37,19 @@ Conta criar_conta() {
     return Usuario_Temporario;
 }
 
-void listar_contas(vector<Conta> Contas, const int cadastros) {
-    for (int i = 0; i < cadastros; i++) {
+void listar_contas(vector<Conta> Contas) {
+    for (int i = 0; i < Contas.size(); i++) {
         cout << "-------------------" << endl;
-        cout << Contas[i].retorna_nome() << endl;
-        cout << Contas[i].retorna_email() << endl;
+        if (Contas[i].retorna_nome_empresa().compare("undefined") == 0) {
+            cout << Contas[i].retorna_nome() << endl;
+            cout << Contas[i].retorna_email() << endl;
+        }
+        else {
+            cout << Contas[i].retorna_nome_empresa() << endl
+                << Contas[i].retorna_categoria() << endl
+                << Contas[i].retorna_cnpj() << endl;
+        }
+        
     }
 }
 
@@ -85,8 +93,8 @@ int verifica_cadastro_email(Conta Contas[], int &cadastros, string email) {
     return -1;
 }
 
-bool email_existe(vector<Conta> Contas, int &cadastros, string email) {
-    for(int i = 0; i < cadastros; i++) {
+bool email_existe(vector<Conta> Contas, string email) {
+    for(int i = 0; i < Contas.size(); i++) {
         if(Contas[i].retorna_email().compare(email) == 0) {
             return true;
         }
@@ -94,26 +102,35 @@ bool email_existe(vector<Conta> Contas, int &cadastros, string email) {
     return false;
 }
 
-bool email_valido(string email) {
-    int indice = email.find("@gmail.com");
+bool email_valido(string email) { // corrigir
+    string vetor_emails[4];
+    vetor_emails[0] = "@gmail.com";
+    vetor_emails[1] = "@hotmail.com";
+    vetor_emails[2] = "@yahoo.com";
+    vetor_emails[3] = "@outlook.com";
+    int indice = -1;
     while(indice == -1) {
         cerr << " | Email invalido. Digite novamente: ";
         cin >> email;
-        indice = email.find("@gmail.com");
+        for (int i = 0; i < 4 && indice != -1; i++) {
+            indice = email.find(vetor_emails[i]);
+        }
     }
     return true;
 }
 
-int verifica_cadastro_senha(vector<Conta> Contas, int&cadastros, string senha) {
-    for(int i = 0; i < cadastros; i++) {
-        if(Contas[i].retorna_senha().compare(senha) == 0) {
-            return i;
-        }
-    }
+int verifica_cadastro_senha(vector<Conta> Contas, string email_param, string senha_param) {
+   for (int i = 0; i < Contas.size(); i++) {
+       if (Contas[i].retorna_email().compare(email_param) == 0) {
+           if (Contas[i].retorna_senha().compare(senha_param) == 0) {
+               return i;
+           }
+       }
+   }
     return -1;
 }
 
-void menu_login(vector<Conta> Contas, int &cadastros) {
+bool menu_login(vector<Conta> Contas, int &cadastros) {
     string opcao;
     string email_login;
     string senha_login;
@@ -130,25 +147,26 @@ void menu_login(vector<Conta> Contas, int &cadastros) {
             cout << " | Insira seu email: ";
             cin >> email_login;
             email_valido(email_login);
-            while (!email_existe(Contas, cadastros, email_login)) {
+            while (!email_existe(Contas, email_login)) {
                 cerr << " | Email incorreto! Digite novamente: ";
                 cin >> email_login;
-                email_valido(email_login);
-                email_existe(Contas, cadastros, email_login);
+                email_valido(email_login);                
             }
+            Conta_Temp.atribui_email(email_login);
             cout << " | Insira sua senha [-1 para 'Esqueci minha senha']: ";
             cin >> senha_login;
             if (senha_login.compare("-1") == 0) {
                 redefinir_senha_login();
             }
-            else {
-                if() { //Comparar senhas
+            else {                
+                if(verifica_cadastro_senha(Contas, email_login, senha_login) != -1) { //Comparar senhas
                     cout << " | Login realizado com sucesso!" << endl;
+                    return true;
                 }
                 else {
                     // while(verifica_cadastro_senha(Contas, cadastros, senha_login) != -1){
-                    cerr << " | Senha incorreta. Digite novamente: ";
-                    cin >> senha_login;
+                    cerr << " | Senha incorreta.";
+                    return false;
                 }
             }
             break;
@@ -157,12 +175,15 @@ void menu_login(vector<Conta> Contas, int &cadastros) {
             //Contas[cadastros].adicionar_conta(Conta_Temp.retorna_nome(), Conta_Temp.retorna_email(), Conta_Temp.retorna_senha());
             Contas.push_back(Conta_Temp);
             cadastros++;
+            return true;
             break;
         case '3':
-            listar_contas(Contas, cadastros);
+            listar_contas(Contas);
+            return true;
             break;
         default:
             cerr << "Opcao invalida. Saindo!" << endl;
+            return false;
             opcao[0] = '-1';
         }
 
@@ -260,17 +281,19 @@ void interface_inicial_sistema(vector<Conta> &ContasC) {
 int main() {
     int max_cadastros = 100;
     vector<Conta> Contas;
+    bool logado = false;
    // Conta *Contas = new Conta[max_cadastros];
     //Conta_Comerciante* ContasC = new Conta_Comerciante[max_cadastros];
     int qtd_cadastrosC = 0;
-    const int inicializacao = 19; //8
+    const int inicializacao = 14; //8
     int qtd_cadastros = inicializacao;
     inicia_dados(Contas, inicializacao);
-    interface_inicial_sistema(Contas);
-    //inicializaLista(Contas, max_cadastros, qtd_cadastros);
-    //inicializaContasC(ContasC, qtd_cadastrosC);
-    menu_login(Contas, qtd_cadastros);
-    
+    // cout << "\tContas disponiveis para teste: " << endl;
+    //exibe_dados(Contas);
+    logado = menu_login(Contas, qtd_cadastros);
+    if (logado) { 
+        interface_inicial_sistema(Contas);
+    }
     //menu_login(Contas, qtd_cadastros);
     //interface_inicial_sistema(Contas);
     return 0;
