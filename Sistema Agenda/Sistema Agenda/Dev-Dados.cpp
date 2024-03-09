@@ -6,62 +6,70 @@
 std::ofstream fout;
 std::ifstream fin;
 
-void inicializa_nomes(std::vector<Conta_Comum>& Conta, int max_inicializacoes) {
+void inicializa_nomes(std::vector<Conta>&Conta_Param, int max_inicializacoes) {
 	char ch[1];
 	std::string nome_inicial = "Cliente ";
 	std::string email_inicial = "Cliente @gmail.com";
 	std::string senha_inicial = "Cliente ";
 	std::string tipo_de_conta = "Cliente";
+	Conta Temp;
 	ch[0] = '0';
-	Conta_Comum Conta_Temp;
 	for (int i = 0; i < max_inicializacoes; i++) {
 		ch[0] = '0' + i;
 		nome_inicial[7] = ch[0];
 		email_inicial[7] = ch[0];
 		senha_inicial[7] = ch[0];
-		Conta_Temp.nome = nome_inicial;
-		Conta_Temp.email = email_inicial;
-		Conta_Temp.senha = senha_inicial;
-		Conta_Temp.tipo_de_conta = tipo_de_conta;
+		Temp.atribui_nome(nome_inicial);		
+		Temp.atribui_email(email_inicial);
+		Temp.atribui_senha(senha_inicial);
+		Temp.atribui_tipo_conta(tipo_de_conta);
 		if (i == 0) {
-			Conta_Temp.nome = "DEV";
-			Conta_Temp.email = "DEV@GMAIL.COM";
-			Conta_Temp.senha = "DEV";
-			Conta_Temp.tipo_de_conta = "DEV";
+			Temp.atribui_nome("DEV");
+			Temp.atribui_email("DEV@GMAIL.COM");
+			Temp.atribui_senha("DEV");
+			Temp.atribui_tipo_conta("DEV");
 		}
-		Conta.push_back(Conta_Temp);
+		std::cout << "Nome: " << Temp.retorna_nome() << std::endl
+			<< "Email: " << Temp.retorna_email() << std::endl
+			<< "Senha: " << Temp.retorna_senha() << std::endl
+			<< "-------------" << std::endl;
+		Conta_Param.push_back(Temp);
 	}
 }
 
-void le_dados(std::vector<Conta_Comum>& Conta, int max_inicializacoes) {
+void le_dados(std::vector<Conta>& Conta, int max_inicializacoes) {
 	fin.open("dados_agenda.dat");
+	std::string nome, email, senha, tipo_de_conta;
 	for (int i = 0; i < max_inicializacoes; i++) {
-		fin >> Conta[i].nome >> Conta[i].email >> Conta[i].senha >> Conta[i].tipo_de_conta;
+		fin >> nome >> email >> senha >> tipo_de_conta;
+		Conta[i].atribui_nome(nome);
+		Conta[i].atribui_email(email);
+		Conta[i].atribui_senha(senha);
+		Conta[i].atribui_tipo_conta(tipo_de_conta);
 	}
 	fout.close();
 }
 
-void escreve_dados(std::vector<Conta_Comum>& Conta, int max_inicializacoes) {
+void escreve_dados(std::vector<Conta>&Conta, int max_inicializacoes) {
 	fout.open("dados_agenda.dat");
 	for (int i = 0; i < max_inicializacoes; i++) {
-		fout << Conta[i].nome << std::endl << Conta[i].email << std::endl << Conta[i].senha << std::endl << Conta[i].tipo_de_conta << std::endl;
+		fout << Conta[i].retorna_nome() << std::endl << Conta[i].retorna_email() << std::endl << Conta[i].retorna_senha() << std::endl << Conta[i].retorna_tipo_conta() << std::endl;
 	}
 	fout.close();
 }
 
-void exibe_dados(std::vector<Conta_Comum> Conta, int max_inicializacoes) {
+void exibe_dados(std::vector<Conta> &Conta, int max_inicializacoes) {
 	for (int i = 0; i < max_inicializacoes; i++) {
-		std::cout << "Nome: " << Conta[i].nome << std::endl << "Email: " << Conta[i].email << std::endl
-			<< "Senha: " << Conta[i].senha << std::endl << "Tipo: " << Conta[i].tipo_de_conta
+		std::cout << "Nome: " << Conta[i].retorna_nome() << std::endl << "Email: " << Conta[i].retorna_email() << std::endl
+			<< "Senha: " << Conta[i].retorna_senha() << std::endl << "Tipo: " << Conta[i].retorna_tipo_conta()
 			<< std::endl << std::endl << " ---------------" << std::endl;
 	}
 }
 
-void inicia_dados(int max_inicializacoes) {
-	std::vector<Conta_Comum> Contaa;
+void inicia_dados(std::vector<Conta> &Contas, int max_inicializacoes) {
 
-	inicializa_nomes(Contaa, max_inicializacoes);
-	escreve_dados(Contaa, max_inicializacoes);
-	le_dados(Contaa, max_inicializacoes);
-	exibe_dados(Contaa, max_inicializacoes);
+	inicializa_nomes(Contas, max_inicializacoes);
+	escreve_dados(Contas, max_inicializacoes);
+	le_dados(Contas, max_inicializacoes);
+	//exibe_dados(Contas, max_inicializacoes);
 }
