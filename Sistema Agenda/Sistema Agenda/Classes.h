@@ -120,6 +120,10 @@ public:
         return false;
     }
 
+    std::string retorna_cnpj() {
+        return this->cnpj;
+    }
+
 
     /////////////////////////////////////
 
