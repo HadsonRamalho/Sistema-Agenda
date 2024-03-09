@@ -4,11 +4,6 @@
 
 using namespace std;
 
-
-bool email_valido(string email);
-
-
-
 Conta criar_conta() {
     Conta Usuario_Temporario;
     std::cout << "\tMENU DE CRIACAO DE CONTA" << endl
@@ -18,7 +13,6 @@ Conta criar_conta() {
     cout << " | Insira seu email: " << endl;
     string email_usuario;
     cin >> email_usuario;
-    email_valido(email_usuario);
     string senha_usuario_parte1;
     string senha_usuario_parte2;
     bool senha_valida = false;
@@ -148,7 +142,7 @@ void menu_login(vector<Conta> Contas, int &cadastros) {
                 redefinir_senha_login();
             }
             else {
-                if(verifica_cadastro_senha(Contas, cadastros, senha_login) != -1) {
+                if() { //Comparar senhas
                     cout << " | Login realizado com sucesso!" << endl;
                 }
                 else {
@@ -200,22 +194,22 @@ void inicializaLista(vector<Conta> &Contas, int max_contas, int &qtd_cadastros) 
 }
 
 // inicializar C_C, PROD
-void inicializaContaComerc(Conta_Comerciante Contas[], int &qtd_cadastros){
+void inicializaContaComerc(Conta Contas[], int &qtd_cadastros){
         for(int i = 0; i < 5; i++){
            // cria_produto(Contas[i]);
         	Contas[i].atribui_nome("Conta" + i + 48);
     }
 }
 
-void Conta_Comerciante::modifica_qtd(int qtd){
+void Conta::modifica_qtd(int qtd){
 	this->qtd_produtos += qtd;
 }
 
-int Conta_Comerciante::retorna_qtd(){
+int Conta::retorna_qtd(){
 	return this->qtd_produtos;
 }
 
-void cria_produto(Conta_Comerciante &Conta) {
+void cria_produto(Conta &Conta) {
     cout << " | Digite o nome do produto: ";
     string nome_prod;
     cin >> nome_prod;
@@ -232,7 +226,7 @@ void cria_produto(Conta_Comerciante &Conta) {
     Conta.prod_atribui_id(Conta.retorna_qtd());
 }
 
-void inicializaContasC(vector<Conta_Comerciante> &Contas, int qtd_cadastros){
+void inicializaContasC(vector<Conta> &Contas, int qtd_cadastros){
 	for(int i = 0; i < qtd_cadastros; i++){
         Contas[i].atribui_nome("Empr");
         Contas[i].atribui_categoria("Artesanato");
@@ -245,19 +239,21 @@ void inicializa_categorias(string categorias[]) {
     categorias[2] = "Roupas";
     categorias[3] = "Servicos";
     categorias[4] = "Sorveterias";
+    categorias[5] = "Outros";
 }
 
-void interface_inicial_sistema(vector<Conta_Comerciante> &ContasC) {
+void interface_inicial_sistema(vector<Conta> &ContasC) {
     cout << "\tCATEGORIAS" << endl;
-    string categorias[5];
+    const int qtd_categorias = 6;
+    string categorias[qtd_categorias];
     inicializa_categorias(categorias);
-    ContasC[0].atribui_categoria("Artesanato");
-    ContasC[0].atribui_nome("Empresa0");
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < qtd_categorias; i++) {
         cout << categorias[i] << endl << "-------------" << endl;
-        if (categorias[i].compare(ContasC[i].retorna_categoria()) == 0) {
-            cout << " | " << ContasC[i].retorna_nome_empresa() << endl << "------------" << endl;
-        }
+       for(int j = 0; j < ContasC.size(); j++){
+           if (categorias[i].compare(ContasC[j].retorna_categoria()) == 0) {
+                  cout << " | " << ContasC[j].retorna_nome_empresa() << endl << "------------" << endl;
+              }
+           }
     }
 }
 
@@ -265,16 +261,17 @@ int main() {
     int max_cadastros = 100;
     vector<Conta> Contas;
    // Conta *Contas = new Conta[max_cadastros];
-    vector<Conta_Comerciante> ContasC;
     //Conta_Comerciante* ContasC = new Conta_Comerciante[max_cadastros];
-    int qtd_cadastros = 0;
     int qtd_cadastrosC = 0;
-    inicia_dados(3);
-    inicializaLista(Contas, max_cadastros, qtd_cadastros);
-    inicializaContasC(ContasC, qtd_cadastrosC);
+    const int inicializacao = 19; //8
+    int qtd_cadastros = inicializacao;
+    inicia_dados(Contas, inicializacao);
+    interface_inicial_sistema(Contas);
+    //inicializaLista(Contas, max_cadastros, qtd_cadastros);
+    //inicializaContasC(ContasC, qtd_cadastrosC);
     menu_login(Contas, qtd_cadastros);
     
-   // menu_login(Contas, qtd_cadastros);
-    //interface_inicial_sistema(ContasC);
+    //menu_login(Contas, qtd_cadastros);
+    //interface_inicial_sistema(Contas);
     return 0;
 }
