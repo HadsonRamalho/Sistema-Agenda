@@ -6,6 +6,69 @@
 std::ofstream fout;
 std::ifstream fin;
 
+void inicializa_empresas(std::vector<Conta>& Conta_Param, int max_inicializacoes) {
+	Conta Temp;
+	Produto T;
+	std::string nome_empresa = "Empresa ";
+	std::string tipo_de_conta = "Empresa";
+	std::string cnpj = "000 ";
+
+	std::string prod_nome = "Produto ";
+	int prod_id;
+	float prod_preco;
+
+	char ch[1];
+	ch[0] = '0';
+	for (int i = 0; i < max_inicializacoes; i++) {
+		int indice = i;
+		if (indice >= 10) {
+			indice %= 10;
+		}
+		ch[0] = '0' + indice;
+		prod_nome[7] = ch[0];
+		prod_preco = 1 * i * 3.5;
+		cnpj[3] = ch[0];
+		nome_empresa[7] = ch[0];
+		T.atribui_id(i);
+		T.atribui_nome(prod_nome);
+		T.atribui_preco(prod_preco);
+		Temp.cadastra_produto(T);
+		Temp.atribui_cnpj(cnpj);
+		Temp.atribui_nome_empr(nome_empresa);
+		Temp.atribui_tipo_conta(tipo_de_conta);
+		
+		char num[2];
+		if (i < 10) {
+			num[0] = '0' + indice;
+		}
+		else {
+			num[0] = '0' + indice;
+			num[1] = '0' + indice;
+		}
+		if (num[0] == '6') {
+			Temp.atribui_categoria("Artesanato");
+		}
+		else if (num[0] == '2') {
+			Temp.atribui_categoria("Bar");
+		}
+		else if (num[0] == '3' || num[0] == '8') {
+			Temp.atribui_categoria("Roupas");
+		}
+		else if (num[0] == '4' || num[0] == '7') {
+			Temp.atribui_categoria("Servicos");
+		}
+		else if (num[0] == '5') {
+			Temp.atribui_categoria("Sorveterias");
+		}
+		else {
+			Temp.atribui_categoria("Outros");
+		}
+		Conta_Param.push_back(Temp);
+	}
+
+	
+}
+
 void inicializa_nomes(std::vector<Conta>&Conta_Param, int max_inicializacoes) {
 	char ch[1];
 	std::string nome_inicial = "Cliente ";
@@ -35,6 +98,7 @@ void inicializa_nomes(std::vector<Conta>&Conta_Param, int max_inicializacoes) {
 			<< "-------------" << std::endl;
 		Conta_Param.push_back(Temp);
 	}
+	inicializa_empresas(Conta_Param, max_inicializacoes);
 }
 
 void le_dados(std::vector<Conta>& Conta, int max_inicializacoes) {
@@ -58,7 +122,7 @@ void escreve_dados(std::vector<Conta>&Conta, int max_inicializacoes) {
 	fout.close();
 }
 
-void exibe_dados(std::vector<Conta> &Conta, int max_inicializacoes) {
+void exibe_dados(std::vector<Conta> Conta, int max_inicializacoes) { //Funcao nao utilizada
 	for (int i = 0; i < max_inicializacoes; i++) {
 		std::cout << "Nome: " << Conta[i].retorna_nome() << std::endl << "Email: " << Conta[i].retorna_email() << std::endl
 			<< "Senha: " << Conta[i].retorna_senha() << std::endl << "Tipo: " << Conta[i].retorna_tipo_conta()
@@ -71,5 +135,4 @@ void inicia_dados(std::vector<Conta> &Contas, int max_inicializacoes) {
 	inicializa_nomes(Contas, max_inicializacoes);
 	escreve_dados(Contas, max_inicializacoes);
 	le_dados(Contas, max_inicializacoes);
-	//exibe_dados(Contas, max_inicializacoes);
 }
