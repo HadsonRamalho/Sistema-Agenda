@@ -11,6 +11,8 @@ void inicializa_empresas(std::vector<Conta>& Conta_Param, int max_inicializacoes
 	Produto T;
 	std::string nome_empresa = "Empresa ";
 	std::string tipo_de_conta = "Empresa";
+	std::string email = "Empresa @gmail.com";
+	std::string senha = "Empresa ";
 	std::string cnpj = "000 ";
 
 	std::string prod_nome = "Produto ";
@@ -45,6 +47,10 @@ void inicializa_empresas(std::vector<Conta>& Conta_Param, int max_inicializacoes
 			num[0] = '0' + indice;
 			num[1] = '0' + indice;
 		}
+		senha[7] = num[0];
+		email[7] = num[0];
+		Temp.atribui_email(email);
+		Temp.atribui_senha(senha);
 		if (num[0] == '6') {
 			Temp.atribui_categoria("Artesanato");
 		}
@@ -64,9 +70,7 @@ void inicializa_empresas(std::vector<Conta>& Conta_Param, int max_inicializacoes
 			Temp.atribui_categoria("Outros");
 		}
 		Conta_Param.push_back(Temp);
-	}
-
-	
+	}	
 }
 
 void inicializa_nomes(std::vector<Conta>&Conta_Param, int max_inicializacoes) {
@@ -91,11 +95,7 @@ void inicializa_nomes(std::vector<Conta>&Conta_Param, int max_inicializacoes) {
 			Temp.atribui_email("DEV@GMAIL.COM");
 			Temp.atribui_senha("DEV");
 			Temp.atribui_tipo_conta("DEV");
-		}
-		std::cout << "Nome: " << Temp.retorna_nome() << std::endl
-			<< "Email: " << Temp.retorna_email() << std::endl
-			<< "Senha: " << Temp.retorna_senha() << std::endl
-			<< "-------------" << std::endl;
+		}	
 		Conta_Param.push_back(Temp);
 	}
 	inicializa_empresas(Conta_Param, max_inicializacoes);
@@ -104,9 +104,14 @@ void inicializa_nomes(std::vector<Conta>&Conta_Param, int max_inicializacoes) {
 void le_dados(std::vector<Conta>& Conta, int max_inicializacoes) {
 	fin.open("dados_agenda.dat");
 	std::string nome, email, senha, tipo_de_conta;
-	for (int i = 0; i < max_inicializacoes; i++) {
+	for (int i = 0; i < Conta.size(); i++) {
 		fin >> nome >> email >> senha >> tipo_de_conta;
-		Conta[i].atribui_nome(nome);
+		if (Conta[i].retorna_tipo_conta().compare("Empresa") != 0) {
+			Conta[i].atribui_nome(nome);
+		}
+		else {
+			Conta[i].atribui_nome_empr(nome);
+		}
 		Conta[i].atribui_email(email);
 		Conta[i].atribui_senha(senha);
 		Conta[i].atribui_tipo_conta(tipo_de_conta);
@@ -116,23 +121,36 @@ void le_dados(std::vector<Conta>& Conta, int max_inicializacoes) {
 
 void escreve_dados(std::vector<Conta>&Conta, int max_inicializacoes) {
 	fout.open("dados_agenda.dat");
-	for (int i = 0; i < max_inicializacoes; i++) {
-		fout << Conta[i].retorna_nome() << std::endl << Conta[i].retorna_email() << std::endl << Conta[i].retorna_senha() << std::endl << Conta[i].retorna_tipo_conta() << std::endl;
+	for (int i = 0; i < Conta.size(); i++) {
+		if (Conta[i].retorna_tipo_conta().compare("Empresa") != 0){
+			fout << Conta[i].retorna_nome() << std::endl;
+		}
+		else {
+			fout << Conta[i].retorna_nome_empresa() << std::endl;
+		}
+		fout << Conta[i].retorna_email() << std::endl << Conta[i].retorna_senha() << std::endl << Conta[i].retorna_tipo_conta() << std::endl;		
 	}
 	fout.close();
 }
 
-void exibe_dados(std::vector<Conta> Conta, int max_inicializacoes) { //Funcao nao utilizada
-	for (int i = 0; i < max_inicializacoes; i++) {
-		std::cout << "Nome: " << Conta[i].retorna_nome() << std::endl << "Email: " << Conta[i].retorna_email() << std::endl
-			<< "Senha: " << Conta[i].retorna_senha() << std::endl << "Tipo: " << Conta[i].retorna_tipo_conta()
-			<< std::endl << std::endl << " ---------------" << std::endl;
+void exibe_dados(std::vector<Conta> Conta) {
+	for (int i = 0; i < Conta.size(); i++) {
+		if (Conta[i].retorna_tipo_conta().compare("Empresa") != 0) {
+			std::cout << "Nome: " << Conta[i].retorna_nome() << std::endl;
+		}
+		else {
+			std::cout << "Nome: " << Conta[i].retorna_nome_empresa() << std::endl;
+		}
+		std::cout << "Email: " << Conta[i].retorna_email() << std::endl
+			<< "Senha: " << Conta[i].retorna_senha() << std::endl
+			<< "-------------" << std::endl;
 	}
 }
 
 void inicia_dados(std::vector<Conta> &Contas, int max_inicializacoes) {
 
 	inicializa_nomes(Contas, max_inicializacoes);
+	inicializa_empresas(Contas, max_inicializacoes);
 	escreve_dados(Contas, max_inicializacoes);
 	le_dados(Contas, max_inicializacoes);
 }
